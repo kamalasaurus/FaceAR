@@ -77,6 +77,17 @@ void function() {
       .catch(handleError)
   }
 
+  Object.keys(colors).forEach((color) => {
+    document
+      .getElementById(color)
+      .addEventListener('click', (e) => {
+        current_color = color;
+        document.querySelectorAll('.btn')
+          .forEach((btn) => btn.classList.remove('selected'));
+        e.target.classList.add('selected');
+      });
+  });
+
   video.addEventListener('canplay', () => {
     ctracker.init();
     ctracker.start(video);

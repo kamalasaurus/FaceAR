@@ -10,21 +10,25 @@ void function() {
   const ctracker = new clm.tracker();
 
 
-  function positionLoop() {
-    requestAnimationFrame(positionLoop);
-    const positions = ctracker.getCurrentPosition();
-    console.log(positions);
-    //if (window.salami) setTimeout((function() { debugger; }.bind(positions)),1000)
-    // positions = [[x_0, y_0], [x_1,y_1], ... ]
-    // do something with the positions ...
-  }
+  //function positionLoop() {
+    //requestAnimationFrame(positionLoop);
+    //const positions = ctracker.getCurrentPosition();
+    //console.log(positions);
+    ////if (window.salami) setTimeout((function() { debugger; }.bind(positions)),1000)
+    //// positions = [[x_0, y_0], [x_1,y_1], ... ]
+    //// do something with the positions ...
+  //}
 
   const cc = canvasInput.getContext('2d');
   function drawLoop() {
     requestAnimationFrame(drawLoop);
     cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-    //cc.drawImage(videoInput, 0, 0, canvasInput.width, canvasInput.height);
-    ctracker.draw(canvasInput);
+    cc.fillStyle = '#FF0000';
+    //ctracker.draw(canvasInput);
+    const lips_points = ctracker.getCurrentPosition().slice(44, 62);
+    lips_points.forEach((point) => {
+      cc.fillRect(...point, 5, 5);
+    });
   }
 
   // Put variables in global scope to make them available to the browser console.
@@ -51,7 +55,7 @@ void function() {
       ctracker.start(video);
 
       drawLoop();
-      positionLoop();
+      //positionLoop();
 
     }, 1000);
   }
@@ -81,7 +85,6 @@ void function() {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       handleSuccess(stream);
       e.target.disabled = true;
-      window.salami = true;
     } catch (e) {
       handleError(e);
     }

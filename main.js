@@ -8,8 +8,12 @@ void function() {
   const ctracker = new clm.tracker();
 
   const colors = {
-    like: 'rgba(206, 54, 93, 0.5)',
-    zip: 'rgba(237, 28, 36, 0.2)'
+    cake: 'rgba(244, 185, 169, 0.5)',
+    crush: 'rgba(206, 54, 93, 0.5)',
+    like: 'rgba(245, 177, 204, 0.5)',
+    zip: 'rgba(237, 28, 36, 0.5)',
+    leo: 'rgba(154, 106, 79, 0.5)',
+    jam: 'rgba(168, 37, 123, 0.5)'
   };
 
   let current_color = 'like';

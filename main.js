@@ -4,31 +4,45 @@ void function() {
 
   const videoInput = document.getElementById('video');
   const canvasInput = document.getElementById('canvas');
-  canvasInput.width = 480;
-  canvasInput.height = 360;
 
   const ctracker = new clm.tracker();
 
-
-  //function positionLoop() {
-    //requestAnimationFrame(positionLoop);
-    //const positions = ctracker.getCurrentPosition();
-    //console.log(positions);
-    ////if (window.salami) setTimeout((function() { debugger; }.bind(positions)),1000)
-    //// positions = [[x_0, y_0], [x_1,y_1], ... ]
-    //// do something with the positions ...
-  //}
-
   const cc = canvasInput.getContext('2d');
+
+  function drawLip(points) {
+    cc.beginPath();
+    points.forEach((point, i) => {
+      if (i === 0) cc.moveTo(...point);
+      else cc.lineTo(...point);
+    });
+    cc.closePath();
+    cc.fill();
+  }
+
+  const like = '#CE365D'; // rgba(206, 54, 93, 0.5)
+  const zip = '#ED1C24';
+
+  const like2 = 'rgba(206, 54, 93, 0.5)';
+  const zip2 = 'rgba(237, 28, 36, 0.2)';
+
   function drawLoop() {
     requestAnimationFrame(drawLoop);
     cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-    cc.fillStyle = '#FF0000';
-    //ctracker.draw(canvasInput);
-    const lips_points = ctracker.getCurrentPosition().slice(44, 62);
-    lips_points.forEach((point) => {
-      cc.fillRect(...point, 5, 5);
-    });
+    //cc.fillStyle = '#FF0000';
+    cc.fillStyle = zip2;
+
+    const position = ctracker.getCurrentPosition();
+    const upper_lip = []
+      .concat(position.slice(44, 51))
+      .concat(position.slice(59, 62));
+
+    const lower_lip = []
+      .concat(position.slice(44,45))
+      .concat(position.slice(56, 59))
+      .concat(position.slice(50, 56));
+
+    drawLip(upper_lip);
+    drawLip(lower_lip);
   }
 
   // Put variables in global scope to make them available to the browser console.
@@ -55,7 +69,6 @@ void function() {
       ctracker.start(video);
 
       drawLoop();
-      //positionLoop();
 
     }, 1000);
   }
@@ -80,16 +93,16 @@ void function() {
     }
   }
 
-  async function init(e) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      handleSuccess(stream);
-      e.target.disabled = true;
-    } catch (e) {
-      handleError(e);
-    }
+  function init(e) {
+    e.target.disabled = true;
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(handleSuccess)
+      .catch(handleError)
   }
 
-  document.querySelector('#show').addEventListener('click', e => init(e));
+  document
+    .querySelector('#show')
+    .addEventListener('click', init);
 
 }();

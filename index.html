@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Glossi-AR</title>
+    <style>
+      #container {
+        position: relative;
+      }
+      #canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      button {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <video id="video" autoplay playsinline></video>
+      <canvas id="canvas"></canvas>
+    </div>
+    <button id="show">open camera</button>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -2,21 +2,20 @@ import clm from './clmtrackr.module.js';
 
 void function() {
 
-  const videoInput = document.getElementById('video');
-  const canvasInput = document.getElementById('canvas');
-
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
   const ctracker = new clm.tracker();
 
-  const cc = canvasInput.getContext('2d');
 
   function drawLip(points) {
-    cc.beginPath();
+    context.beginPath();
     points.forEach((point, i) => {
-      if (i === 0) cc.moveTo(...point);
-      else cc.lineTo(...point);
+      if (i === 0) context.moveTo(...point);
+      else context.lineTo(...point);
     });
-    cc.closePath();
-    cc.fill();
+    context.closePath();
+    context.fill();
   }
 
   const like = '#CE365D'; // rgba(206, 54, 93, 0.5)
@@ -27,9 +26,8 @@ void function() {
 
   function drawLoop() {
     requestAnimationFrame(drawLoop);
-    cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-    //cc.fillStyle = '#FF0000';
-    cc.fillStyle = zip2;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = zip2;
 
     const position = ctracker.getCurrentPosition();
     const upper_lip = []
@@ -45,25 +43,18 @@ void function() {
     drawLip(lower_lip);
   }
 
-  // Put variables in global scope to make them available to the browser console.
   const constraints = window.constraints = {
     audio: false,
     video: true
   };
 
-  function handleSuccess(stream) {
-    const video = document.querySelector('video');
-    const videoTracks = stream.getVideoTracks();
-    console.log('Got stream with constraints:', constraints);
-    console.log(`Using video device: ${videoTracks[0].label}`);
-    window.stream = stream; // make variable available to browser console
-
+  function handleSucontextess(stream) {
     video.srcObject = stream;
 
     setTimeout(() => {
 
-      canvasInput.width = video.videoWidth;
-      canvasInput.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
       ctracker.init();
       ctracker.start(video);
@@ -74,22 +65,15 @@ void function() {
   }
 
   function handleError(error) {
-    if (error.name === 'ConstraintNotSatisfiedError') {
-      const v = constraints.video;
-      errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
-    } else if (error.name === 'PermissionDeniedError') {
-      errorMsg('Permissions have not been granted to use your camera and ' +
-        'microphone, you need to allow the page access to your devices in ' +
-        'order for the demo to work.');
-    }
-    errorMsg(`getUserMedia error: ${error.name}`, error);
-  }
-
-  function errorMsg(msg, error) {
-    const errorElement = document.querySelector('#errorMsg');
-    errorElement.innerHTML += `<p>${msg}</p>`;
-    if (typeof error !== 'undefined') {
-      console.error(error);
+    switch (error.name) {
+      case 'ConstraintNotSatisfiedError':
+        const v = constraints.video;
+        console.error(`The resolution of ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+      case 'PermissionDeniedError':
+        console.error(`Permissions have not been granted to use your camera and microphone, you need to allow the
+        page acontextess to your devices.`);
+      default:
+        console.error(`getUserMedia error: ${error.name}`);
     }
   }
 
@@ -97,7 +81,7 @@ void function() {
     e.target.disabled = true;
     navigator.mediaDevices
       .getUserMedia(constraints)
-      .then(handleSuccess)
+      .then(handleSucontextess)
       .catch(handleError)
   }
 

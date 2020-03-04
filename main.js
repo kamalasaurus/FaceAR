@@ -7,12 +7,12 @@ void function() {
   const context = canvas.getContext('2d');
   const ctracker = new clm.tracker();
 
+  const colors = {
+    like: 'rgba(206, 54, 93, 0.5)',
+    zip: 'rgba(237, 28, 36, 0.2)'
+  };
 
-  const like = '#CE365D'; // rgba(206, 54, 93, 0.5)
-  const zip = '#ED1C24';
-
-  const like2 = 'rgba(206, 54, 93, 0.5)';
-  const zip2 = 'rgba(237, 28, 36, 0.2)';
+  let current_color = 'like';
 
   function drawLip(points) {
     context.beginPath();
@@ -27,7 +27,7 @@ void function() {
   function drawLoop() {
     requestAnimationFrame(drawLoop);
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = zip2;
+    context.fillStyle = colors[current_color];
 
     const position = ctracker.getCurrentPosition();
 
